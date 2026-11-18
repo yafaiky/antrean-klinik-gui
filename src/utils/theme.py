@@ -1,7 +1,10 @@
 """Palet warna, tipografi, dan primitif vektor Canvas untuk Heptamed Klinik."""
 
+import ctypes
 import math
+import os
 import tkinter as tk
+from pathlib import Path
 from typing import Iterable
 
 COLORS = {
@@ -25,8 +28,8 @@ COLORS = {
     "dock_active": "#349F7F",
     "login_green": "#18624E",
     "login_watermark": "#1E6B56",
-    "logo_dark": "#154F3E",
-    "logo_light": "#339778",
+    "logo_dark": "#17664F",
+    "logo_light": "#2B8D71",
     "chart_bar": "#176650",
     "chart_bar_peak": "#2E9276",
     "chart_gigi": "#4E9A7D",
@@ -49,11 +52,20 @@ COLORS = {
     "gridline": "#EBF0ED",
 }
 
-FONT_FAMILY = "Segoe UI"
+# Inisialisasi font Instrument Sans dari Google Fonts jika file ttf tersedia
+_FONT_DIR = Path(__file__).resolve().parents[2] / "assets"
+_TTF_PATH = _FONT_DIR / "InstrumentSans.ttf"
+if _TTF_PATH.exists() and os.name == "nt":
+    try:
+        ctypes.windll.gdi32.AddFontResourceExW(str(_TTF_PATH), 0x10, 0)
+    except Exception:
+        pass
+
+FONT_FAMILY = "Instrument Sans"
 
 
 def font(size: int, weight: str = "normal") -> tuple[str, int, str]:
-    """Kembalikan tuple font standar aplikasi."""
+    """Kembalikan tuple font standar aplikasi menggunakan Instrument Sans."""
     if weight == "bold":
         return (FONT_FAMILY, size, "bold")
     return (FONT_FAMILY, size)
@@ -117,39 +129,51 @@ def draw_heptamed_logo(
     light_color: str = COLORS["logo_light"],
     tags: str | tuple[str, ...] = "",
 ) -> None:
-    """Gambar logo silang geometris Heptamed Klinik secara vektor."""
+    """Gambar logo Heptamed Klinik persis 1:1 sesuai gambar (kotak bingkai + salib hijau tua + panah chevron teal atas-bawah)."""
     s = size
-    # Lapisan belakang: bingkai silang hijau muda
-    # Batang vertikal belakang
+    # 1. Bingkai luar bujur sangkar dengan outline tipis
+    # Bounding box frame di icon koordinat 4..38 dari 44 = ~ 0.09s .. 0.86s
+    fx1 = x + 0.09 * s
+    fy1 = y + 0.09 * s
+    fx2 = x + 0.86 * s
+    fy2 = y + 0.86 * s
     canvas.create_rectangle(
-        x + 0.30 * s, y + 0.04 * s, x + 0.70 * s, y + 0.96 * s,
-        fill=light_color, outline="", tags=tags,
+        fx1, fy1, fx2, fy2,
+        outline=dark_color, width=max(1, int(0.068 * s)), fill="", tags=tags,
     )
-    # Batang horizontal bingkai tipis
+
+    # 2. Palang silang hijau tua (dark_color)
+    # Batang horizontal lebar
     canvas.create_rectangle(
-        x + 0.10 * s, y + 0.24 * s, x + 0.90 * s, y + 0.76 * s,
-        fill=light_color, outline="", tags=tags,
+        x + 0.00 * s, y + 0.27 * s, x + 0.98 * s, y + 0.70 * s,
+        fill=dark_color, outline="", tags=tags,
     )
-    # Lapisan tengah gelap dengan puncak chevron dan celah bawah chevron
-    poly = [
-        x + 0.50 * s, y + 0.16 * s,
-        x + 0.69 * s, y + 0.34 * s,
-        x + 0.94 * s, y + 0.34 * s,
-        x + 0.94 * s, y + 0.68 * s,
-        x + 0.70 * s, y + 0.68 * s,
-        x + 0.70 * s, y + 0.92 * s,
-        x + 0.63 * s, y + 0.92 * s,
-        x + 0.63 * s, y + 0.68 * s,
-        x + 0.50 * s, y + 0.54 * s,
-        x + 0.37 * s, y + 0.68 * s,
-        x + 0.37 * s, y + 0.92 * s,
-        x + 0.30 * s, y + 0.92 * s,
-        x + 0.30 * s, y + 0.68 * s,
-        x + 0.06 * s, y + 0.68 * s,
-        x + 0.06 * s, y + 0.34 * s,
-        x + 0.31 * s, y + 0.34 * s,
+    # Batang vertikal
+    canvas.create_rectangle(
+        x + 0.27 * s, y + 0.00 * s, x + 0.70 * s, y + 0.98 * s,
+        fill=dark_color, outline="", tags=tags,
+    )
+
+    # 3. Panah chevron teal / hijau muda atas (chevron mengarah ke atas di cabang atas silang)
+    poly_top = [
+        x + 0.49 * s, y + 0.07 * s,
+        x + 0.70 * s, y + 0.27 * s,
+        x + 0.61 * s, y + 0.27 * s,
+        x + 0.49 * s, y + 0.16 * s,
+        x + 0.36 * s, y + 0.27 * s,
+        x + 0.27 * s, y + 0.27 * s,
     ]
-    canvas.create_polygon(poly, fill=dark_color, outline="", tags=tags)
+    canvas.create_polygon(poly_top, fill=light_color, outline="", tags=tags)
+
+    # 4. Panah besar teal / hijau muda bawah (chevron mengarah ke atas di batang bawah silang)
+    poly_bottom = [
+        x + 0.49 * s, y + 0.43 * s,
+        x + 0.70 * s, y + 0.64 * s,
+        x + 0.70 * s, y + 0.98 * s,
+        x + 0.27 * s, y + 0.98 * s,
+        x + 0.27 * s, y + 0.64 * s,
+    ]
+    canvas.create_polygon(poly_bottom, fill=light_color, outline="", tags=tags)
 
 
 def draw_dock_icon(
