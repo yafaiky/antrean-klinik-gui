@@ -1,1 +1,5 @@
-"""Paket logika bisnis, CRUD, dan penyimpanan data (terpisah dari GUI)."""
+"""Package layanan bisnis Heptamed Klinik."""
+
+from src.services.clinic_service import ClinicService
+
+__all__ = ["ClinicService"]
