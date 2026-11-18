@@ -1,0 +1,1 @@
+"""Paket fungsi utilitas aplikasi."""

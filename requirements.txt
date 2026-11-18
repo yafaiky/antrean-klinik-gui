@@ -1,0 +1,5 @@
+# Aplikasi Desktop GUI Python menggunakan library bawaan Python (Tkinter & ttk).
+# Tidak ada dependensi eksternal wajib untuk menjalankan aplikasi.
+#
+# Opsional (untuk development/testing):
+# pytest>=8.0.0
