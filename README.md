@@ -1,26 +1,5 @@
 # Proyek Ujian Praktik PBTGM — Aplikasi Desktop GUI Python
 
-> **Mata Pelajaran:** Pemrograman Berorientasi Teks, Grafis, dan Multimedia (PBTGM)  
-> **Kelas:** XII RPL 1 — SMK Plus Pelita Nusantara  
-> **Tahun Ajaran:** 2026–2027
-
-## Identitas Kelompok
-
-- **Kelompok:** `[Nomor/Nama Kelompok]`
-- **Soal Praktik:** `[1 / 2 / 3]`
-- **Domain Studi Kasus:** `[Nama Domain]`
-- **Judul Aplikasi:** `[Judul Aplikasi GUI]`
-- **Link Desain Figma:** `https://www.figma.com/...`
-
-### Pembagian Peran Tim
-
-| No | Nama Anggota | Peran | Tanggung Jawab Utama |
-| :-: | :--- | :--- | :--- |
-| 1 | `[Nama]` | Project Manager (PM) | Koordinasi tim, Sprint Backlog, manajemen GitHub & laporan |
-| 2 | `[Nama]` | UI/UX Designer | Desain wireframe & frame Figma, konsistensi visual |
-| 3 | `[Nama]` | Programmer | Implementasi GUI Python (Tkinter/ttk), OOP, Event Handling, Validasi |
-| 4 | `[Nama]` | QA Tester | Test case (valid/invalid), code review, debugging log |
-
 ## Struktur Folder
 
 ```text
@@ -58,10 +37,3 @@ uprak-pbtgm/
    ```bash
    python -m unittest discover -s tests -v
    ```
-
-## Alur Kolaborasi Git
-
-1. Tarik pembaruan terbaru sebelum bekerja: `git pull origin main`
-2. Buat branch fitur sesuai tugas (misal: `feat/login-ui`, `fix/validasi-input`).
-3. Commit perubahan dengan pesan yang jelas (misal: `feat: tambah form login`).
-4. Push dan buat Pull Request ke `main` setelah diuji.
